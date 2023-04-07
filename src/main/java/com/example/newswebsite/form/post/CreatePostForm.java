@@ -8,6 +8,5 @@ public class CreatePostForm {
     private String content;
     private String slug;
     private Long parentId;
-    private Long tagId;
     private Long categoryId;
 }

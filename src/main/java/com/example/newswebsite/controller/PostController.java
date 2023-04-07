@@ -5,14 +5,12 @@ import com.example.newswebsite.dto.post.PostDTO;
 import com.example.newswebsite.dto.post.PostPagingDTO;
 import com.example.newswebsite.entity.Category;
 import com.example.newswebsite.entity.Post;
-import com.example.newswebsite.entity.Tag;
 import com.example.newswebsite.form.post.CreatePostForm;
 import com.example.newswebsite.form.post.UpdatePostForm;
 import com.example.newswebsite.mapper.PostMapper;
 import com.example.newswebsite.security.principal.UserDetailService;
 import com.example.newswebsite.service.impl.CategoryServiceImpl;
 import com.example.newswebsite.service.impl.PostServiceImpl;
-import com.example.newswebsite.service.impl.TagServiceImpl;
 import com.example.newswebsite.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,8 +34,6 @@ public class PostController {
     UserServiceImpl userService;
     @Autowired
     UserDetailService userDetailService;
-    @Autowired
-    TagServiceImpl tagService;
     @Autowired
     CategoryServiceImpl categoryService;
 
@@ -171,12 +167,7 @@ public class PostController {
         }
         post.setStatus(LocalVariable.activeStatus);
         post.setUserEntity(userDetailService.getCurrentUser());
-        // save in table post_tag and post_category
-        if(createPostForm.getTagId() != null){
-            Tag tag = tagService.findById(createPostForm.getTagId());
-            tag.getTagPosts().add(post);
-            tagService.save(tag);
-        }
+        // save in table post_category
         if(createPostForm.getCategoryId() != null){
             Category category = categoryService.findById(createPostForm.getCategoryId());
             category.getCategoryPosts().add(post);
