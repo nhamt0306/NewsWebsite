@@ -86,4 +86,9 @@ public class InteractionServiceImpl implements InteractionService {
     public List<Interactions> getListFavoritePostByUser(Long userId) {
         return interactionRepository.findAllByUserEntityIdAndUpVote(userId, LocalVariable.isTrue);
     }
+
+    @Override
+    public Interactions findByUserAndPost(Long userId, Long postId) {
+        return interactionRepository.findByUserEntityIdAndPostId(userId, postId);
+    }
 }
