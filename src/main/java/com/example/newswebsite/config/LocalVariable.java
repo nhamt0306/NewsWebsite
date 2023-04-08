@@ -40,4 +40,8 @@ public class LocalVariable {
     public static final String USER = "User";
 
 
+    public static final Integer isTrue = 1;
+    public static final Integer isFalse = 0;
+
+
 }

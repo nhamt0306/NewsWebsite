@@ -37,6 +37,9 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id") //category_id is foreign key of SubCategory and referenced to id of table Category
     private UserEntity userEntity;
 
-
+    //Relationship
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Interactions> interactions = new ArrayList<>();
 
 }

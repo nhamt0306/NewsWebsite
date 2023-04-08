@@ -11,4 +11,6 @@ public class PostDTO {
     private String status;
     private Long parentId;
     private Long userId;
+    private Integer numberVote;
+    private Integer isVoted;
 }

@@ -43,7 +43,10 @@ public class UserEntity extends BaseClassEntity{
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 
-
+    //Relationship
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Interactions> interactions = new ArrayList<>();
 
     // Constructor, Getter and Setter
 
