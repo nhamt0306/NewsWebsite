@@ -60,8 +60,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPaging(Integer pageNo, Integer pageSize) {
-        Pageable paging = PageRequest.of(pageNo, pageSize);
+    public List<Post> getAllPaging(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize,  Sort.by(Sort.Direction.DESC, sortBy));
         Page<Post> pagedResult = postRepository.findAll(paging);
 
         if(pagedResult.hasContent()) {
@@ -83,8 +83,25 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getAllPagingByUser(Long userId, Integer pageNo, Integer pageSize, String sortBy) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
         Page<Post> pagedResult = postRepository.findAllByUserEntityId(userId, paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Post>();
+        }
+    }
+
+    @Override
+    public List<Post> findAllByCategoryId(Long categoryId) {
+        return postRepository.findAllByCategoryId(categoryId);
+    }
+
+    @Override
+    public List<Post> getAllPagingByCategory(Long categoryId, Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, sortBy));
+        Page<Post> pagedResult = postRepository.findAllByCategoryId(categoryId, paging);
 
         if(pagedResult.hasContent()) {
             return pagedResult.getContent();

@@ -1,6 +1,9 @@
 package com.example.newswebsite.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -20,17 +23,9 @@ public class Category {
     private String status;
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name= "category_post",
-            joinColumns = @JoinColumn(name = "category_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    List<Post> categoryPosts = new ArrayList<>();
+    //Relationship
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Post> postList = new ArrayList<>();
 
-    public List<Post> getCategoryPosts() {
-        return categoryPosts;
-    }
-
-    public void setCategoryPosts(List<Post> categoryPosts) {
-        this.categoryPosts = categoryPosts;
-    }
 }

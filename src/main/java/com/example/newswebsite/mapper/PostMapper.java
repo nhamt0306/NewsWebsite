@@ -31,6 +31,8 @@ public class PostMapper {
         postDTO.setUserName(userEntity.getFullname());
         postDTO.setAvatar(userEntity.getAvatar());
         postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
+        postDTO.setCategoryId(post.getCategory().getId());
+        postDTO.setCategoryName(post.getCategory().getTitle());
         // check tuong tac cua user hien tai
         if (userDetailService.getCurrentUser() == null){
             postDTO.setIsVoted(LocalVariable.isFalse);
@@ -45,6 +47,8 @@ public class PostMapper {
         }else {
             postDTO.setIsVoted(LocalVariable.isFalse);
         }
+
+//        post.get
         return postDTO;
     }
 }

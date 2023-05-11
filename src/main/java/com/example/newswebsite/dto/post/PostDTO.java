@@ -16,4 +16,6 @@ public class PostDTO {
     private String userName;
     private String avatar;
     private String thumbnail;
+    private String categoryName;
+    private Long categoryId;
 }

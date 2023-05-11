@@ -43,4 +43,10 @@ public class Post {
     @JsonManagedReference
     private List<Interactions> interactions = new ArrayList<>();
 
+    //relationship: many to one with user
+    @ManyToOne(fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
+    private Category category;
+
 }

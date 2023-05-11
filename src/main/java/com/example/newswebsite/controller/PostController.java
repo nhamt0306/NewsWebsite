@@ -74,7 +74,7 @@ public class PostController {
         {
             pageNo = maxPageNo +1;
         }
-        postList = postService.getAllPaging(pageNo-1, pageSize);
+        postList = postService.getAllPaging(pageNo-1, pageSize, sortBy);
 
         List<PostDTO> postDTOList = new ArrayList<>();
         for (Post post : postList)
@@ -108,6 +108,40 @@ public class PostController {
             pageNo = maxPageNo +1;
         }
         postList = postService.getAllPagingByUser(id,pageNo-1, pageSize, sortBy);
+
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : postList)
+        {
+            PostDTO postDTO = postMapper.mapperPostToDTO(post);
+            postDTOList.add(postDTO);
+        }
+
+        PostPagingDTO postPagingDTO = new PostPagingDTO(postDTOList, maxPageSize);
+        return postPagingDTO;
+    }
+
+
+    // category paging
+    @GetMapping("/post/get-all-by-category/{id}")
+    public Object getAllPagingByCategory(@PathVariable long id,
+                                     @RequestParam(defaultValue = "1") Integer pageNo,
+                                     @RequestParam(defaultValue = "100") Integer pageSize,
+                                     @RequestParam(defaultValue = "id") String sortBy) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<Post> postList = new ArrayList<>();
+
+        maxPageSize = postService.findAllByCategoryId(id).size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        postList = postService.getAllPagingByCategory(id,pageNo-1, pageSize, sortBy);
 
         List<PostDTO> postDTOList = new ArrayList<>();
         for (Post post : postList)
@@ -174,9 +208,7 @@ public class PostController {
         post.setUserEntity(userDetailService.getCurrentUser());
         // save in table post_category
         if(createPostForm.getCategoryId() != null){
-            Category category = categoryService.findById(createPostForm.getCategoryId());
-            category.getCategoryPosts().add(post);
-            categoryService.save(category);
+            post.setCategory(categoryService.findById(createPostForm.getCategoryId()));
         }
         postService.save(post);
         // response dto for FE
@@ -211,6 +243,9 @@ public class PostController {
         }
         if (updatePostForm.getParentId() != null){
             post.setParentId(updatePostForm.getParentId());
+        }
+        if (updatePostForm.getCategoryId() != null){
+            post.setCategory(categoryService.findById(updatePostForm.getCategoryId()));
         }
         post.setUpdateAt(new Date());
         postService.save(post);

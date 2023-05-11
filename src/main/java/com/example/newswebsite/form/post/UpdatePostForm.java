@@ -10,4 +10,5 @@ public class UpdatePostForm {
     private String slug;
     private Long userId;
     private Long parentId;
+    private Long categoryId;
 }

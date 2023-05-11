@@ -12,9 +12,11 @@ public interface PostService {
     List<Post> findAllByParentId(Long id);
     List<Post> findAllByStatus(String status);
     void deleteById(Long id);
-    List<Post> getAllPaging(Integer pageNo, Integer pageSize);
+    List<Post> getAllPaging(Integer pageNo, Integer pageSize, String sortBy);
     Post findByTile(String title);
     List<Post> findAllByUserId(Long userId);
     List<Post> getAllPagingByUser(Long userId, Integer pageNo, Integer pageSize, String sortBy);
+    List<Post> findAllByCategoryId(Long categoryId);
+    List<Post> getAllPagingByCategory(Long categoryId, Integer pageNo, Integer pageSize, String sortBy);
     Post uploadImage(long id, MultipartFile image);
 }
