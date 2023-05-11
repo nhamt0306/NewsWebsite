@@ -24,6 +24,7 @@ public class Post {
     private String slug;
     private Long parentId;
     private String status;
+    private String thumbnail;
 
 
     //Relationship
@@ -32,9 +33,9 @@ public class Post {
     private List<Comment> comments = new ArrayList<>();
 
     //relationship: many to one with user
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id") //category_id is foreign key of SubCategory and referenced to id of table Category
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     private UserEntity userEntity;
 
     //Relationship

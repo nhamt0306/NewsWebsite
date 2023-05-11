@@ -13,4 +13,7 @@ public class PostDTO {
     private Long userId;
     private Integer numberVote;
     private Integer isVoted;
+    private String userName;
+    private String avatar;
+    private String thumbnail;
 }

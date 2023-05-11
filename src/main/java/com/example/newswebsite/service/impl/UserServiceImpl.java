@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity uploadAvatar(MultipartFile image, Long id) {
         UserEntity user = userRepository.findById(id).get();
         String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(user.getId()),
-                "ClothingStore"+ "/" + "Avatar");
+                "NewsWebsite"+ "/" + "Avatar");
         if(!imageUrl.equals("-1")) {
             user.setAvatar(imageUrl);
         }

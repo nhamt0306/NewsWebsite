@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    CloudinaryService cloudinaryService;
 
     @Override
     public List<Post> getAll() {
@@ -89,4 +92,20 @@ public class PostServiceImpl implements PostService {
             return new ArrayList<Post>();
         }
     }
+
+    @Override
+    public Post uploadImage(long id, MultipartFile image) {
+        Post post = postRepository.findById(id).get();
+        String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(id),
+                "NewsWebsite"+ "/" + "Post");
+        if(!imageUrl.equals("-1")) {
+            post.setThumbnail(imageUrl);
+        }
+        else if(post.getThumbnail().equals("") || post.getThumbnail().equals("-1"))
+            post.setThumbnail("");
+
+        return postRepository.save(post);
+    }
+
+
 }

@@ -6,6 +6,7 @@ import com.example.newswebsite.dto.post.PostPagingDTO;
 import com.example.newswebsite.entity.Category;
 import com.example.newswebsite.entity.Interactions;
 import com.example.newswebsite.entity.Post;
+import com.example.newswebsite.entity.UserEntity;
 import com.example.newswebsite.form.post.CreatePostForm;
 import com.example.newswebsite.form.post.UpdatePostForm;
 import com.example.newswebsite.mapper.PostMapper;
@@ -49,13 +50,6 @@ public class PostController {
         for (Post post : postList)
         {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             postDTOList.add(postDTO);
         }
         return ResponseEntity.ok(postDTOList);
@@ -86,13 +80,6 @@ public class PostController {
         for (Post post : postList)
         {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             postDTOList.add(postDTO);
         }
 
@@ -126,13 +113,6 @@ public class PostController {
         for (Post post : postList)
         {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             postDTOList.add(postDTO);
         }
 
@@ -148,13 +128,6 @@ public class PostController {
         for (Post post : postList)
         {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             postDTOList.add(postDTO);
         }
         return ResponseEntity.ok(postDTOList);
@@ -168,13 +141,6 @@ public class PostController {
         for (Post post : postList)
         {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             postDTOList.add(postDTO);
         }
         return ResponseEntity.ok(postDTOList);
@@ -188,13 +154,6 @@ public class PostController {
         }
         else {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
-            postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
-            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), post.getId());
-            if (interactions.getUpVote() == LocalVariable.isTrue)
-            {
-                postDTO.setIsVoted(LocalVariable.isTrue);
-            }
-            else postDTO.setIsVoted(LocalVariable.isFalse);
             return ResponseEntity.ok(postDTO);
         }
     }
