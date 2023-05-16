@@ -27,10 +27,14 @@ public class PostMapper {
         postDTO.setStatus(post.getStatus());
         postDTO.setParentId(post.getParentId());
         postDTO.setSlug(post.getSlug());
+        postDTO.setTotalView(post.getTotalView());
+        postDTO.setTotalComment(post.getTotalComment());
         postDTO.setUserId(userEntity.getId());
         postDTO.setUserName(userEntity.getFullname());
         postDTO.setAvatar(userEntity.getAvatar());
+        postDTO.setPostDate(post.getCreateAt());
         postDTO.setNumberVote(interactionService.countUpVoteByPost(post.getId()));
+        postDTO.setNumberDislike(interactionService.countDownVoteByPost(post.getId()));
         postDTO.setCategoryId(post.getCategory().getId());
         postDTO.setCategoryName(post.getCategory().getTitle());
         // check tuong tac cua user hien tai
@@ -44,11 +48,17 @@ public class PostMapper {
                 postDTO.setIsVoted(LocalVariable.isTrue);
             }
             else postDTO.setIsVoted(LocalVariable.isFalse);
+
+            if(interactions.getDownVote() == LocalVariable.isTrue){
+                postDTO.setIsDisliked(LocalVariable.isTrue);
+            }else {
+                postDTO.setIsDisliked(LocalVariable.isFalse);
+            }
         }else {
             postDTO.setIsVoted(LocalVariable.isFalse);
+            postDTO.setIsDisliked(LocalVariable.isFalse);
         }
 
-//        post.get
         return postDTO;
     }
 }

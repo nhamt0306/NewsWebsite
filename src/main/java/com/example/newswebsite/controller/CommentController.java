@@ -3,6 +3,7 @@ package com.example.newswebsite.controller;
 import com.example.newswebsite.config.LocalVariable;
 import com.example.newswebsite.dto.comment.CommentDTO;
 import com.example.newswebsite.entity.Comment;
+import com.example.newswebsite.entity.Post;
 import com.example.newswebsite.form.comment.CreateCommentForm;
 import com.example.newswebsite.form.comment.EditCommentForm;
 import com.example.newswebsite.mapper.CommentMapper;
@@ -61,14 +62,20 @@ public class CommentController {
 
     @PostMapping("/user/comment/create")
     public Object createComment(@RequestBody CreateCommentForm createCommentForm) throws ParseException {
+        if(postService.findById(createCommentForm.getPostId()) == null){
+            return ResponseEntity.ok("Post is not exist!");
+        }
+        Post post = postService.findById(createCommentForm.getPostId());
         Comment comment = new Comment();
         comment.setContent(createCommentForm.getContent());
         comment.setParentId(createCommentForm.getParentId());
         comment.setUserId(userDetailService.getCurrentUser().getId());
         comment.setParentId(createCommentForm.getParentId());
-        comment.setPost(postService.findById(createCommentForm.getPostId()));
+        comment.setPost(post);
         comment.setCreatedAt(new Date());
         commentService.save(comment);
+        post.setTotalComment(post.getTotalComment()+ 1);
+        postService.save(post);
         // response dto for FE
         CommentDTO commentDTO = commentMapper.mapperCommentToDTO(comment);
         return commentDTO;

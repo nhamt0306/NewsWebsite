@@ -111,6 +111,30 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> getAllPagingSortByComment(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "totalComment"));
+        Page<Post> pagedResult = postRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Post>();
+        }
+    }
+
+    @Override
+    public List<Post> getAllPagingSortByView(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(Sort.Direction.DESC, "totalView"));
+        Page<Post> pagedResult = postRepository.findAll(paging);
+
+        if(pagedResult.hasContent()) {
+            return pagedResult.getContent();
+        } else {
+            return new ArrayList<Post>();
+        }
+    }
+
+    @Override
     public Post uploadImage(long id, MultipartFile image) {
         Post post = postRepository.findById(id).get();
         String imageUrl = cloudinaryService.uploadFile(image,String.valueOf(id),
@@ -122,6 +146,11 @@ public class PostServiceImpl implements PostService {
             post.setThumbnail("");
 
         return postRepository.save(post);
+    }
+
+    @Override
+    public List<Post> searchPostByKeyword(String keyword) {
+        return postRepository.searchPost(keyword);
     }
 
 

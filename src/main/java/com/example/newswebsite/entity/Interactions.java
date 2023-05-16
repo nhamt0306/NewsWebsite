@@ -17,13 +17,13 @@ public class Interactions {
     private Integer downVote;
 
     //relationship: many to one with post
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "id") //category_id is foreign key of SubCategory and referenced to id of table Category
     private Post post;
 
     //relationship: many to one with user
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id") //category_id is foreign key of SubCategory and referenced to id of table Category
     private UserEntity userEntity;

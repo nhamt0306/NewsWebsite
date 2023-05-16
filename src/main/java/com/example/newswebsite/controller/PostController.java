@@ -87,6 +87,70 @@ public class PostController {
         return postPagingDTO;
     }
 
+    // get by total comment
+    @GetMapping("/post/sort-by-comment")
+    public Object getAllWithPagingSortByTotalComment(@RequestParam(defaultValue = "1") Integer pageNo,
+                                   @RequestParam(defaultValue = "100") Integer pageSize,
+                                   @RequestParam(defaultValue = "id") String sortBy) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<Post> postList = new ArrayList<>();
+
+        maxPageSize = postService.findAllByStatus(LocalVariable.activeStatus).size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        postList = postService.getAllPagingSortByComment(pageNo-1, pageSize, sortBy);
+
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : postList)
+        {
+            PostDTO postDTO = postMapper.mapperPostToDTO(post);
+            postDTOList.add(postDTO);
+        }
+
+        PostPagingDTO postPagingDTO = new PostPagingDTO(postDTOList, maxPageSize);
+        return postPagingDTO;
+    }
+
+    // get by total view
+    @GetMapping("/post/sort-by-view")
+    public Object getAllWithPagingSortByTotalView(@RequestParam(defaultValue = "1") Integer pageNo,
+                                                     @RequestParam(defaultValue = "100") Integer pageSize,
+                                                     @RequestParam(defaultValue = "id") String sortBy) {
+        Integer maxPageSize;
+        Integer maxPageNo;
+        List<Post> postList = new ArrayList<>();
+
+        maxPageSize = postService.findAllByStatus(LocalVariable.activeStatus).size();
+        if (pageSize > maxPageSize)
+        {
+            pageSize = 12;
+        }
+        maxPageNo = maxPageSize / pageSize;
+        if (pageNo > maxPageNo +1)
+        {
+            pageNo = maxPageNo +1;
+        }
+        postList = postService.getAllPagingSortByView(pageNo-1, pageSize, sortBy);
+
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : postList)
+        {
+            PostDTO postDTO = postMapper.mapperPostToDTO(post);
+            postDTOList.add(postDTO);
+        }
+
+        PostPagingDTO postPagingDTO = new PostPagingDTO(postDTOList, maxPageSize);
+        return postPagingDTO;
+    }
+
     // category paging
     @GetMapping("/post/get-all-by-user/{id}")
     public Object getAllPagingByUser(@PathVariable long id,
@@ -154,6 +218,9 @@ public class PostController {
         return postPagingDTO;
     }
 
+
+
+
     @GetMapping("/post/get-all-active")
     public ResponseEntity<?> getAllActive()
     {
@@ -188,8 +255,50 @@ public class PostController {
         }
         else {
             PostDTO postDTO = postMapper.mapperPostToDTO(post);
+            post.setTotalView(post.getTotalView() + 1);
+            postService.save(post);
             return ResponseEntity.ok(postDTO);
         }
+    }
+
+    @GetMapping("/user/like/{id}")
+    public ResponseEntity<?> likePostById(@PathVariable long id){
+        if (interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id) != null) {
+            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id);
+            if (interactions.getUpVote() != LocalVariable.isTrue) {
+                interactions.setUpVote(LocalVariable.isTrue);
+                interactions.setDownVote(LocalVariable.isFalse);
+                interactionService.save(interactions);
+            }
+        }else {
+            Interactions interactions = new Interactions();
+            interactions.setPost(postService.findById(id));
+            interactions.setUpVote(LocalVariable.isTrue);
+            interactions.setDownVote(LocalVariable.isFalse);
+            interactions.setUserEntity(userDetailService.getCurrentUser());
+            interactionService.save(interactions);
+        }
+        return ResponseEntity.ok("Like post success!");
+    }
+
+    @GetMapping("/user/dislike/{id}")
+    public ResponseEntity<?> dislikePostById(@PathVariable long id){
+        if (interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id) != null) {
+            Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id);
+            if (interactions.getDownVote() != LocalVariable.isTrue) {
+                interactions.setDownVote(LocalVariable.isTrue);
+                interactions.setUpVote(LocalVariable.isFalse);
+                interactionService.save(interactions);
+            }
+        }else {
+            Interactions interactions = new Interactions();
+            interactions.setPost(postService.findById(id));
+            interactions.setDownVote(LocalVariable.isTrue);
+            interactions.setUpVote(LocalVariable.isFalse);
+            interactions.setUserEntity(userDetailService.getCurrentUser());
+            interactionService.save(interactions);
+        }
+        return ResponseEntity.ok("Dislike post success!");
     }
 
     @PostMapping("/admin/post/create")
@@ -198,6 +307,8 @@ public class PostController {
         post.setTitle(createPostForm.getTitle());
         post.setContent(createPostForm.getContent());
         post.setSlug(createPostForm.getSlug());
+        post.setTotalComment(0L);
+        post.setTotalView(0L);
         post.setCreateAt(new Date());
         if (createPostForm.getParentId() == null){
             post.setParentId(0L);
@@ -253,4 +364,16 @@ public class PostController {
         return postDTO;
     }
 
+
+    @GetMapping("/post/search")
+    public Object searchPost(@RequestParam String keyword) throws ParseException {
+        List<Post> postList = postService.searchPostByKeyword(keyword);
+        List<PostDTO> postDTOList = new ArrayList<>();
+        for (Post post : postList)
+        {
+            PostDTO postDTO = postMapper.mapperPostToDTO(post);
+            postDTOList.add(postDTO);
+        }
+        return ResponseEntity.ok(postDTOList);
+    }
 }

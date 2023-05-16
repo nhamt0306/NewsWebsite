@@ -25,6 +25,8 @@ public class Post {
     private Long parentId;
     private String status;
     private String thumbnail;
+    private Long totalView;
+    private Long totalComment;
 
 
     //Relationship

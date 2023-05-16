@@ -19,6 +19,7 @@ public class CommentMapper {
         commentDTO.setCreateAt(comment.getCreatedAt());
         commentDTO.setUpdateAt(comment.getUpdateAt());
         commentDTO.setParentId(comment.getParentId());
+        commentDTO.setCommentDate(comment.getCreatedAt());
         commentDTO.setUserId(comment.getUserId());
         UserEntity user = userService.findById(comment.getUserId()).get();
         commentDTO.setUsername(user.getFullname());

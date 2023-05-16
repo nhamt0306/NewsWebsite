@@ -14,4 +14,5 @@ public class CommentDTO {
     private Long userId;
     private String username;
     private String avatar;
+    private Date commentDate;
 }
