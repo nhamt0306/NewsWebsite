@@ -91,4 +91,9 @@ public class InteractionServiceImpl implements InteractionService {
     public Interactions findByUserAndPost(Long userId, Long postId) {
         return interactionRepository.findByUserEntityIdAndPostId(userId, postId);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        interactionRepository.deleteById(id);
+    }
 }

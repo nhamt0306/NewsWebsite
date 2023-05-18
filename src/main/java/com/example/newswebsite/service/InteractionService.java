@@ -12,4 +12,5 @@ public interface InteractionService {
     Integer countDownVoteByPost(Long postId);
     List<Interactions> getListFavoritePostByUser(Long userId);
     Interactions findByUserAndPost(Long userId, Long postId);
+    void deleteById(Long id);
 }

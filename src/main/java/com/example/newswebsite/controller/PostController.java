@@ -261,7 +261,7 @@ public class PostController {
         }
     }
 
-    @GetMapping("/user/like/{id}")
+    @PostMapping("/user/like/{id}")
     public ResponseEntity<?> likePostById(@PathVariable long id){
         if (interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id) != null) {
             Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id);
@@ -269,6 +269,8 @@ public class PostController {
                 interactions.setUpVote(LocalVariable.isTrue);
                 interactions.setDownVote(LocalVariable.isFalse);
                 interactionService.save(interactions);
+            }else {
+                interactionService.deleteById(interactions.getId());
             }
         }else {
             Interactions interactions = new Interactions();
@@ -281,7 +283,7 @@ public class PostController {
         return ResponseEntity.ok("Like post success!");
     }
 
-    @GetMapping("/user/dislike/{id}")
+    @PostMapping("/user/dislike/{id}")
     public ResponseEntity<?> dislikePostById(@PathVariable long id){
         if (interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id) != null) {
             Interactions interactions = interactionService.findByUserAndPost(userDetailService.getCurrentUser().getId(), id);
@@ -289,6 +291,8 @@ public class PostController {
                 interactions.setDownVote(LocalVariable.isTrue);
                 interactions.setUpVote(LocalVariable.isFalse);
                 interactionService.save(interactions);
+            }else {
+                interactionService.deleteById(interactions.getId());
             }
         }else {
             Interactions interactions = new Interactions();
