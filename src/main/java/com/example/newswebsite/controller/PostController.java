@@ -331,11 +331,48 @@ public class PostController {
         return postDTO;
     }
 
+    @PostMapping("/user/post/create")
+    public Object createPostByUser(@RequestBody CreatePostForm createPostForm) throws ParseException {
+        Post post = new Post();
+        post.setTitle(createPostForm.getTitle());
+        post.setContent(createPostForm.getContent());
+        post.setSlug(createPostForm.getSlug());
+        post.setTotalComment(0L);
+        post.setTotalView(0L);
+        post.setCreateAt(new Date());
+        if (createPostForm.getParentId() == null){
+            post.setParentId(0L);
+        }else {
+            post.setParentId(createPostForm.getParentId());
+        }
+        post.setStatus(LocalVariable.pendingStatus);
+        post.setUserEntity(userDetailService.getCurrentUser());
+        // save in table post_category
+        if(createPostForm.getCategoryId() != null){
+            post.setCategory(categoryService.findById(createPostForm.getCategoryId()));
+        }
+        postService.save(post);
+        // response dto for FE
+        PostDTO postDTO = postMapper.mapperPostToDTO(post);
+        return postDTO;
+    }
+
     @DeleteMapping("/admin/post/{id}")
     public ResponseEntity<?> deleteById(@PathVariable long id)
     {
         postService.deleteById(id);
         return ResponseEntity.ok(LocalVariable.messageDeletePostSuccess);
+    }
+
+    @PostMapping("/admin/post/accept/{id}")
+    public ResponseEntity<?> acceptPostById(@PathVariable long id)
+    {
+        Post post = postService.findById(id);
+        if (post == null) {
+            return new ResponseEntity<>(LocalVariable.messageCannotFindPost + id, HttpStatus.NOT_FOUND);
+        }
+        post.setStatus(LocalVariable.activeStatus);
+        return ResponseEntity.ok(LocalVariable.messageUpdatePost+ id);
     }
 
     @PutMapping("/admin/post/update")

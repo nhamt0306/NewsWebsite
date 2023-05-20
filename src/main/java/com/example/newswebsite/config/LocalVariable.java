@@ -5,6 +5,7 @@ import java.util.Random;
 public class LocalVariable {
     public static final String disableStatus = "Disable";
     public static final String activeStatus = "Active";
+    public static final String pendingStatus = "Pending";
     public static final int OrderPagingLimit = 9000;
     public static String GetOTP() {
         return String.format("%06d", new Random().nextInt(999999));
@@ -26,6 +27,7 @@ public class LocalVariable {
     //Post message
     public static final String messageDeletePostSuccess = "Delete post success!";
     public static final String messageCannotFindPost = "Cannot post tag with id = ";
+    public static final String messageUpdatePost = "Update post successful with id = ";
 
     // User
     public static final String messageCannotFindUser = "Cannot find user with id = ";
