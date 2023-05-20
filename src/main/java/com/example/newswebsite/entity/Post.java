@@ -1,5 +1,6 @@
 package com.example.newswebsite.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
@@ -38,6 +39,7 @@ public class Post {
     @ManyToOne(fetch = FetchType.EAGER)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference
     private UserEntity userEntity;
 
     //Relationship

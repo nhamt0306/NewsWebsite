@@ -3,6 +3,7 @@ package com.example.newswebsite.controller;
 import com.example.newswebsite.config.LocalVariable;
 import com.example.newswebsite.dto.user.ChangePasswordDTO;
 import com.example.newswebsite.entity.UserEntity;
+import com.example.newswebsite.form.user.UpdateInfoForm;
 import com.example.newswebsite.mapper.UserMapper;
 import com.example.newswebsite.security.principal.UserDetailService;
 import com.example.newswebsite.service.impl.UserServiceImpl;
@@ -67,28 +68,28 @@ public class UserController {
     }
 
     @PostMapping("/user/profile/change")
-    public Object changeProfile(@RequestBody UserEntity userEntity) throws ParseException {
+    public Object changeProfile(@RequestBody UpdateInfoForm userEntity) throws ParseException {
         UserEntity user = userDetailService.getCurrentUser();
         user.setUpdate_at(new Timestamp(System.currentTimeMillis()));
-        if (userEntity.getFullname() != null)
-        {
-            user.setFullname(userEntity.getFullname());
-        }
         if (userEntity.getAddress() != null)
         {
             user.setAddress(userEntity.getAddress());
         }
-        if (userEntity.getPhone() != null)
+        if (userEntity.getFullname() != null)
         {
-            user.setPhone(userEntity.getPhone());
+            user.setFullname(userEntity.getFullname());
         }
-        if (userEntity.getDob() != null)
-        {
-            user.setDob(userEntity.getDob());
-        }
+//        if (userEntity.getDob() != null)
+//        {
+//            user.setDob(userEntity.getDob());
+//        }
         if (userEntity.getGender() != null)
         {
             user.setGender(userEntity.getGender());
+        }
+        if (userEntity.getPhone() != null)
+        {
+            user.setPhone(userEntity.getPhone());
         }
         userService.save(user);
         return "Change user profile success!";

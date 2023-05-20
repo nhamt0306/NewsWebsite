@@ -24,7 +24,18 @@ public class UploadImageController {
     UserDetailService userDetailService;
 
     @PostMapping("/admin/post/{id}/image")
-    public ResponseEntity<?> uploadProductImg(@PathVariable long id,
+    public ResponseEntity<?> uploadThumpnailByAdmin(@PathVariable long id,
+                                              @RequestParam(value = "image", required = false) MultipartFile image) {
+        if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
+            return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
+        }
+        Post post = postService.uploadImage(id, image);
+
+        return ResponseEntity.ok("Upload image success:" + post.getThumbnail());
+    }
+
+    @PostMapping("/user/post/{id}/image")
+    public ResponseEntity<?> uploadThumnailByUser(@PathVariable long id,
                                               @RequestParam(value = "image", required = false) MultipartFile image) {
         if(!image.getContentType().equals("image/png") && !image.getContentType().equals("image/jpeg")) {
             return new ResponseEntity<>("File khong hop le!", HttpStatus.BAD_REQUEST);
