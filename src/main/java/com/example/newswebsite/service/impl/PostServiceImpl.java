@@ -154,4 +154,10 @@ public class PostServiceImpl implements PostService {
     }
 
 
+    @Override
+    public Object countPostByMonth(Integer month) {
+        return postRepository.getTotalPostByMonth(month);
+    }
+
+
 }

@@ -23,4 +23,5 @@ public interface PostService {
     List<Post> getAllPagingSortByView(Integer pageNo, Integer pageSize, String sortBy);
     Post uploadImage(long id, MultipartFile image);
     List<Post> searchPostByKeyword(String keyword);
+    Object countPostByMonth(Integer month);
 }

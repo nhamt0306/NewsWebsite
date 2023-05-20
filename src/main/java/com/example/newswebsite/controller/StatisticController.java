@@ -1,10 +1,8 @@
 package com.example.newswebsite.controller;
 
-import com.example.newswebsite.dto.post.PostDTO;
 import com.example.newswebsite.dto.statistic.StatisticDTO;
-import com.example.newswebsite.entity.Post;
+import com.example.newswebsite.dto.statistic.TotalPostInMonthDTO;
 import com.example.newswebsite.service.impl.CategoryServiceImpl;
-import com.example.newswebsite.service.impl.CommentServiceImpl;
 import com.example.newswebsite.service.impl.PostServiceImpl;
 import com.example.newswebsite.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin(origins = "*")
 @RequestMapping
@@ -42,6 +39,17 @@ public class StatisticController {
         statisticDTO.setTotalCategory(category);
         return ResponseEntity.ok(statisticDTO);
     }
-
+    @GetMapping("/admin/chart")
+    public ResponseEntity<?> getChart()
+    {
+        List<TotalPostInMonthDTO> chartList= new ArrayList<>(); // map return
+        for (int i =1; i< 13; i++)
+        {
+            Integer numberPost = Integer.parseInt(String.valueOf(postService.countPostByMonth(i)));
+            TotalPostInMonthDTO statisticMapper = new TotalPostInMonthDTO(String.valueOf(i),numberPost);
+            chartList.add(statisticMapper);
+        }
+        return ResponseEntity.ok(chartList);
+    }
 
 }

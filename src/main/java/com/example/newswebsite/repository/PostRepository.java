@@ -25,4 +25,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             "    FROM news_website.posts \n" +
             "    WHERE posts.content like %:Keyword% or posts.title like %:Keyword%")
     List<Post> searchPost(@Param("Keyword") String Keyword);
+
+
+    // Statistic by day
+    @Query(value = "SELECT Count(*) FROM news_website.posts Where status = 'Active' and year(update_at) = YEAR(CURDATE()) and month(update_at) = :Month", nativeQuery = true)
+    Object getTotalPostByMonth(@Param("Month") Integer Month);
 }

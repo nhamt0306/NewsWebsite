@@ -314,6 +314,7 @@ public class PostController {
         post.setTotalComment(0L);
         post.setTotalView(0L);
         post.setCreateAt(new Date());
+        post.setUpdateAt(new Date());
         if (createPostForm.getParentId() == null){
             post.setParentId(0L);
         }else {
@@ -340,6 +341,7 @@ public class PostController {
         post.setTotalComment(0L);
         post.setTotalView(0L);
         post.setCreateAt(new Date());
+        post.setUpdateAt(new Date());
         if (createPostForm.getParentId() == null){
             post.setParentId(0L);
         }else {
