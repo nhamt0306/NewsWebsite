@@ -88,7 +88,11 @@ public class CommentController {
         {
             return ResponseEntity.ok(LocalVariable.messageDoesNotHaveComment);
         }
+        Comment comment = commentService.findById(id);
+        Post post = postService.findById(comment.getPost().getId());
+        post.setTotalComment(post.getTotalComment() - 1);
         commentService.deleteById(id);
+        postService.save(post);
         return ResponseEntity.ok(LocalVariable.messageDeleteCommentSuccess);
     }
 
